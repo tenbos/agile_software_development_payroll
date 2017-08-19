@@ -92,4 +92,17 @@ public class TestPayroll extends TestCase {
 		
 		assertNotNull(hm);
 	}
+	
+	@Test
+	public void testDeleteEmployee() {
+		int empId = 3;
+		AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
+		t.Execute();
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		DeleteEmployeeTransaction dt = new DeleteEmployeeTransaction(empId);
+		dt.Execute();
+		e = PayrollDatabase.GetEmployee(empId);
+		assertNull(e);
+	}
 }
