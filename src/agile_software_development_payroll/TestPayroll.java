@@ -105,4 +105,21 @@ public class TestPayroll extends TestCase {
 		e = PayrollDatabase.GetEmployee(empId);
 		assertNull(e);
 	}
+	
+	@Test
+	public void testTimeCardTransaction() {
+		int empId = 2;
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+		TimeCardTransaction tct = new TimeCardTransaction(20011031, 8.0, empId);
+		tct.Execute();
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		PaymentClassification pc = e.GetClassification();
+		HourlyClassification hc = (HourlyClassification) pc;
+		assertNotNull(hc);
+		TimeCard tc = hc.GetTimeCard(20011031);
+		assertNotNull(tc);
+		assertEquals(8.0, tc.GetHours());
+	}
 }
