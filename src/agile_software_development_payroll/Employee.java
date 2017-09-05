@@ -8,6 +8,7 @@ public class Employee {
 	private PaymentClassification itsClassification;
 	private PaymentSchedule itsSchedule;
 	private PaymentMethod itsMethod;
+	private Affiliation itsAffiliation;
 	
 	public Employee(int empId, String name, String address) {
 		itsEmpId = empId;
@@ -15,31 +16,39 @@ public class Employee {
 		itsAddress = address;
 	}
 
-	public PaymentClassification GetClassification() {
-		return itsClassification;
-	}
-
 	public String GetName() {
 		return itsName;
 	}
 
-	public PaymentSchedule GetSchedule() {
-		return itsSchedule;
-	}
-
-	public PaymentMethod GetMethod() {
-		return itsMethod;
+	public PaymentClassification GetClassification() {
+		return itsClassification;
 	}
 
 	public void SetClassification(PaymentClassification pc) {
 		itsClassification = pc;
 	}
 
+	public PaymentSchedule GetSchedule() {
+		return itsSchedule;
+	}
+
 	public void SetSchedule(PaymentSchedule ps) {
 		itsSchedule = ps;
 	}
 
+	public PaymentMethod GetMethod() {
+		return itsMethod;
+	}
+
 	public void SetMethod(PaymentMethod pm) {
 		itsMethod = pm;
+	}
+	
+	public Affiliation GetAffiliation() {
+		return itsAffiliation;
+	}
+	
+	public void SetAffiliation(Affiliation af) {
+		itsAffiliation = af;		
 	}
 }
