@@ -229,4 +229,29 @@ public class TestPayroll extends TestCase {
 		MonthlySchedule ms = (MonthlySchedule) ps;
 		assertNotNull(ms);
 	}
+	
+	@Test
+	public void testChangeCommissionedTransaction() {
+		int empId = 2;
+		
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+		
+		ChangeCommissionedTransaction cct = new ChangeCommissionedTransaction(empId, 25000, 4.5);
+		cct.Execute();
+		
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		
+		PaymentClassification pc = e.GetClassification();
+		assertNotNull(pc);
+		CommissionedClassification cc = (CommissionedClassification) pc;
+		assertNotNull(cc);
+		assertEquals(25000.0, cc.GetSalary());
+		assertEquals(4.5, cc.GetRate());
+		
+		PaymentSchedule ps = e.GetSchedule();
+		BiweeklySchedule bs = (BiweeklySchedule) ps;
+		assertNotNull(bs);
+	}
 }
