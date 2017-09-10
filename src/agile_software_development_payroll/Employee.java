@@ -19,6 +19,10 @@ public class Employee {
 	public String GetName() {
 		return itsName;
 	}
+	
+	public void SetName(String name) {
+		itsName = name;
+	}
 
 	public PaymentClassification GetClassification() {
 		return itsClassification;
