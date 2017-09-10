@@ -55,4 +55,12 @@ public class Employee {
 	public void SetAffiliation(Affiliation af) {
 		itsAffiliation = af;		
 	}
+
+	public String GetAddress() {
+		return itsAddress;
+	}
+	
+	public void SetAddress(String address) {
+		itsAddress = address;
+	}
 }
