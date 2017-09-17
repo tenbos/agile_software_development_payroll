@@ -6,8 +6,16 @@ import java.util.Map;
 public class UnionAffiliation implements Affiliation {
 	
 	private Map<Long, ServiceCharge> itsServiceCharges = new HashMap<>();
+	private int itsMemberId;
+	private double itsDues;
 	
-	public UnionAffiliation(double d) {
+	public UnionAffiliation(double dues) {
+		itsDues = dues;
+	}
+	
+	public UnionAffiliation(int memberId, double dues) {
+		itsMemberId = memberId;
+		itsDues = dues;
 	}
 
 	@Override
@@ -23,4 +31,11 @@ public class UnionAffiliation implements Affiliation {
 		itsServiceCharges.put(date, new ServiceCharge(date, amount));
 	}
 
+	public int GetMemberId() {
+		return itsMemberId;
+	}
+
+	public double GetDues() {
+		return itsDues;
+	}
 }
