@@ -19,6 +19,10 @@ public class Employee {
 	public String GetName() {
 		return itsName;
 	}
+	
+	public void SetName(String name) {
+		itsName = name;
+	}
 
 	public PaymentClassification GetClassification() {
 		return itsClassification;
@@ -50,5 +54,13 @@ public class Employee {
 	
 	public void SetAffiliation(Affiliation af) {
 		itsAffiliation = af;		
+	}
+
+	public String GetAddress() {
+		return itsAddress;
+	}
+	
+	public void SetAddress(String address) {
+		itsAddress = address;
 	}
 }

@@ -158,4 +158,189 @@ public class TestPayroll extends TestCase {
 		double sc = af.GetServiceCharge(20011031);
 		assertEquals(12.95, sc, .001);
 	}
+	
+	@Test
+	public void testChangeNameTransaction() {
+		int empId = 2;
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+		ChangeNameTransaction cnt = new ChangeNameTransaction(empId, "Bob");
+		cnt.Execute();
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		assertEquals("Bob", e.GetName());
+	}
+	
+	@Test
+	public void testChangeAddressTransaction() {
+		int empId = 2;
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+		ChangeAddressTransaction cat = new ChangeAddressTransaction(empId, "Second Home");
+		cat.Execute();
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		assertEquals("Second Home", e.GetAddress());
+	}
+	
+	@Test
+	public void testChangeHourlyTransaction() {
+		int empId = 3;
+		AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
+		t.Execute();
+		ChangeHourlyTransaction cht = new ChangeHourlyTransaction(empId, 27.52);
+		cht.Execute();
+		
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		
+		PaymentClassification pc = e.GetClassification();
+		assertNotNull(pc);
+		HourlyClassification hc = (HourlyClassification) pc;
+		assertNotNull(hc);
+		assertEquals(27.52, hc.GetRate());
+		
+		PaymentSchedule ps = e.GetSchedule();
+		assertNotNull(ps);
+		WeeklySchedule ws = (WeeklySchedule) ps;
+		assertNotNull(ws);
+	}
+	
+	@Test
+	public void testChangeSalariedTransaction() {
+		int empId = 3;
+		
+		AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
+		t.Execute();
+		
+		ChangeSalariedTransaction cst = new ChangeSalariedTransaction(empId, 25000);
+		cst.Execute();
+		
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		
+		PaymentClassification pc = e.GetClassification();
+		assertNotNull(pc);
+		SalariedClassification sc = (SalariedClassification) pc;
+		assertNotNull(sc);
+		assertEquals(25000.0, sc.GetSalary());
+		
+		PaymentSchedule ps = e.GetSchedule();
+		MonthlySchedule ms = (MonthlySchedule) ps;
+		assertNotNull(ms);
+	}
+	
+	@Test
+	public void testChangeCommissionedTransaction() {
+		int empId = 2;
+		
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+		
+		ChangeCommissionedTransaction cct = new ChangeCommissionedTransaction(empId, 25000, 4.5);
+		cct.Execute();
+		
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		
+		PaymentClassification pc = e.GetClassification();
+		assertNotNull(pc);
+		CommissionedClassification cc = (CommissionedClassification) pc;
+		assertNotNull(cc);
+		assertEquals(25000.0, cc.GetSalary());
+		assertEquals(4.5, cc.GetRate());
+		
+		PaymentSchedule ps = e.GetSchedule();
+		BiweeklySchedule bs = (BiweeklySchedule) ps;
+		assertNotNull(bs);
+	}
+
+	@Test
+	public void testChangeMailTransaction() {
+
+		int empId = 2;
+
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+
+		ChangeMailTransaction cmt = new ChangeMailTransaction(empId, "4080 El Cerrito Road");
+		cmt.Execute();
+
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+
+		PaymentMethod pm = e.GetMethod();
+		assertNotNull(pm);
+		MailMethod mm = (MailMethod) pm;
+		assertNotNull(mm);
+		assertEquals("4080 El Cerrito Road", mm.GetAddress());
+	}
+
+	@Test
+	public void testChangeDirectTransaction() {
+
+		int empId = 2;
+
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+
+		ChangeDirectTransaction cdt = new ChangeDirectTransaction(empId, "FirstNational", "1058209");
+		cdt.Execute();
+
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+
+		PaymentMethod pm = e.GetMethod();
+		assertNotNull(pm);
+		DirectMethod dm = (DirectMethod) pm;
+		assertNotNull(dm);
+		assertEquals("FirstNational", dm.GetBank());
+		assertEquals("1058209", dm.GetAccount());
+	}
+	
+	@Test
+	public void testChangeHoldTransaction() {
+
+		int empId = 2;
+
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+
+		ChangeHoldTransaction cht = new ChangeHoldTransaction(empId);
+		cht.Execute();
+
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+
+		PaymentMethod pm = e.GetMethod();
+		assertNotNull(pm);
+		HoldMethod hm = (HoldMethod) pm;
+		assertNotNull(hm);
+	}
+	
+	@Test
+	public void testChangeMemberTransaction() {
+		
+		int empId = 2;
+		int memberId = 7734;
+		
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.Execute();
+		
+		ChangeMemberTransaction cmt = new ChangeMemberTransaction(empId, memberId, 99.42);
+		cmt.Execute();
+		
+		Employee e = PayrollDatabase.GetEmployee(empId);
+		assertNotNull(e);
+		
+		Affiliation af = e.GetAffiliation();
+		assertNotNull(af);
+		UnionAffiliation ua = (UnionAffiliation) af;
+		assertNotNull(ua);
+		assertEquals(99.42, ua.GetDues());
+		
+		Employee m = PayrollDatabase.GetUnionMember(memberId);
+		assertNotNull(m);
+		assertEquals(e, m);
+	}
 }

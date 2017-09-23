@@ -18,6 +18,7 @@ public class PayrollDatabase {
 	
 	public static void Clear() {
 		itsEmployees.clear();
+		itsUnionMembers.clear();
 	}
 	
 	public static void DeleteEmployee(int empId) {
@@ -30,6 +31,10 @@ public class PayrollDatabase {
 	
 	public static Employee GetUnionMember(int memberId) {
 		return itsUnionMembers.get(memberId);
+	}
+
+	public static void RemoveUnionMember(int memberId) {
+		itsUnionMembers.remove(memberId);
 	}
 	
 }
